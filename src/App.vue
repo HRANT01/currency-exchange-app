@@ -25,8 +25,9 @@
             </svg>
           </button>
 
-          <mySelect :value="to" @change="to = $event.target.value" :exchangeRate="exchangeRate" :selLoad="selLoad"
-                    class="border-2 w-20"></mySelect>
+<!--          <mySelect :value="to" @change="to = $event.target.value" :exchangeRate="exchangeRate" :selLoad="selLoad"-->
+<!--                    class="border-2 w-20"></mySelect>-->
+          <my-select></my-select>
 
         </div>
 
@@ -50,6 +51,8 @@
 </template>
 
 <script>
+import {mapActions} from 'vuex'
+import { mapState } from 'vuex'
 import mySelect from '@/components/mySelect.vue'
 import amountInput from '@/components/amountInput.vue'
 import {fetchRates} from '@/services/exchangeReqs.js'
@@ -60,31 +63,37 @@ export default {
 
   components: {mySelect, amountInput},
 
+  computed:{
+    ...mapActions(['Rates'])
+  },
+
   data() {
     return {
-      exchangeRate: '',
+      // exchangeRate: '',
       amount: 0,
       result: 0,
       from: '',
       to: '',
       inputAmount: '',
       isLoading: false,
-      selLoad: false,
+      // selLoad: false,
     }
   },
 
   async mounted() {
-    this.selLoad = true
-
-    fetchRates().then((rates) => {
-      this.exchangeRate = rates
-      this.selLoad = false
-    })
+    await this.Rates()
+    // this.selLoad = true
+    //
+    // fetchRates().then((rates) => {
+    //   this.exchangeRate = rates
+    //   this.selLoad = false
+    // })
   },
 
   methods: {
     async convResult() {
       this.isLoading = true
+
       if (this.inputAmount !== "") {
         res(this.from, this.to).then((result) => {
           this.result = result * this.inputAmount
