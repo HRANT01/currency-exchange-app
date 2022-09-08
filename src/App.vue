@@ -6,7 +6,7 @@
       <p class="text-center mt-10 text-slate-500 tracking-tighter">Exchange Rate</p>
       <div v-if="isLoading" class="mt-5 m-auto block animate-pulse w-40 h-7 bg-blue-400 rounded"></div>
       <div v-else class="max-w-fit m-auto block">
-        <h1 class="text-center text-4xl mt-2">{{ result }}</h1>
+        <h1 class="text-center text-4xl mt-2">{{ getRate }}</h1>
       </div>
 
       <div class="box-content w-3/4 m-auto block ">
@@ -14,8 +14,13 @@
         <amountInput v-model="inputAmount"/>
 
         <div class="flex justify-between mt-8">
-          <mySelect :value="from" @change="from = $event.target.value" :exchangeRate="exchangeRate" :selLoad="selLoad"
-                    class="border-2 w-20"></mySelect>
+          <mySelect
+              :value="form.from"
+              :exchangeRate="rates"
+              :selLoad="isLoadingRates"
+              @change="form.from = $event.target.value"
+              class="border-2 w-20"
+          />
 
           <button @click="swapValues" class="mb-1 ">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3.5"
@@ -25,10 +30,13 @@
             </svg>
           </button>
 
-<!--          <mySelect :value="to" @change="to = $event.target.value" :exchangeRate="exchangeRate" :selLoad="selLoad"-->
-<!--                    class="border-2 w-20"></mySelect>-->
-          <my-select></my-select>
-
+          <mySelect
+              :value="form.to"
+              @change="form.to = $event.target.value"
+              :exchangeRate="rates"
+              :selLoad="isLoadingRates"
+              class="border-2 w-20"
+          />
         </div>
 
         <button @click="convResult" class="bg-blue-500 w-full mt-8 h-10 text-white">
@@ -51,60 +59,53 @@
 </template>
 
 <script>
-import {mapActions} from 'vuex'
-import { mapState } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import mySelect from '@/components/mySelect.vue'
 import amountInput from '@/components/amountInput.vue'
-import {fetchRates} from '@/services/exchangeReqs.js'
-import {res} from "@/services/exchangeReqs.js"
 
 export default {
   name: 'App',
 
-  components: {mySelect, amountInput},
+  components: {
+    mySelect,
+    amountInput
+  },
 
   computed:{
-    ...mapActions(['Rates'])
+    ...mapGetters(['rate', 'rates']),
+
+    getRate() {
+      return Math.ceil(this.inputAmount ? this.inputAmount * this.rate : this.rate)
+    }
   },
 
   data() {
     return {
-      // exchangeRate: '',
-      amount: 0,
-      result: 0,
-      from: '',
-      to: '',
-      inputAmount: '',
+      form: {
+        from: null,
+        to: null,
+      },
+      inputAmount: null,
       isLoading: false,
-      // selLoad: false,
+      isLoadingRates: true,
     }
   },
 
-  async mounted() {
-    await this.Rates()
-    // this.selLoad = true
-    //
-    // fetchRates().then((rates) => {
-    //   this.exchangeRate = rates
-    //   this.selLoad = false
-    // })
+   mounted() {
+    this.getRates().then(() => {
+      this.isLoadingRates = false
+    })
   },
 
   methods: {
+    ...mapActions(['getRates', 'getExchangeRate']),
+
     async convResult() {
       this.isLoading = true
 
-      if (this.inputAmount !== "") {
-        res(this.from, this.to).then((result) => {
-          this.result = result * this.inputAmount
-          this.isLoading = false
-        })
-      } else {
-        res(this.from, this.to).then((result) => {
-          this.result = result
-          this.isLoading = false
-        })
-      }
+      this.getExchangeRate(this.form).then(() => {
+        this.isLoading = false
+      })
     },
 
     swapValues() {
@@ -113,7 +114,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>

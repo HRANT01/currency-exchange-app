@@ -10,7 +10,7 @@ export const fetchRates = async () => {
   }
 }
 
-export let res = async (from, to) => {
+export let fetchExchangeRate = async (from, to) => {
   try {
     const answer = await axios.get(`https://v6.exchangerate-api.com/v6/${API_KEY}/pair/${from}/${to}`)
     return answer.data.conversion_rate
