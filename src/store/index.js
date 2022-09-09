@@ -31,7 +31,6 @@ export default createStore({
 
     async getExchangeRate({commit}, payload){
       const result = await fetchExchangeRate(payload.from, payload.to)
-      console.log(result)
 
       commit('setRate', result)
     }
