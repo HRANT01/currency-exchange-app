@@ -1,6 +1,6 @@
 <template>
   <div class="box-content w-full m-auto block">
-    <label class="text-xs">Amount</label>
+    <label class="text-xs">{{ $t('amount') }}</label>
     <input :value="modelValue" @input="updateInput" type="text" class="border-2 w-full h-10 m-auto block">
   </div>
 </template>

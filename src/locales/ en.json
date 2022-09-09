@@ -1,0 +1,8 @@
+{
+  "header": "Simple currency converter",
+  "convert": "Convert",
+  "amount": "Amount",
+  "routing": "Routing",
+  "about": "About",
+  "exchangeRate": "Exchange Rate"
+}

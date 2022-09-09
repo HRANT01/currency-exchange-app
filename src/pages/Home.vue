@@ -1,13 +1,14 @@
 <template>
-  <div class="h-1/3 flex justify-center justify-between w-52 m-auto block mt-10">
-    <router-link class="hover:text-lime-500" to="/rout" >Routing</router-link >
-    <router-link class="hover:text-lime-500" to="/third">About</router-link>
+  <localeSwitcher class="inline-flex mt-1.5"/>
+  <div class="h-1/3 flex justify-center justify-between w-52 m-auto block mt-2">
+    <router-link class="hover:text-lime-500" to="/rout">{{ $t('routing') }}</router-link>
+    <router-link class="hover:text-lime-500" to="/third">{{ $t('about') }}</router-link>
   </div>
-  <h1 class="text-center mt-7 mb-7 text-xl font-bold">Simple Currency Converter</h1>
+  <h1 class="text-center mt-7 mb-7 text-xl font-bold">{{ $t('header') }}</h1>
   <div class="w-screen h-1/3 flex justify-center items-center">
     <div class="bg-white border-blue-500 w-96 h-96 border-t-8">
 
-      <p class="text-center mt-10 text-slate-500 tracking-tighter">Exchange Rate</p>
+      <p class="text-center mt-10 text-slate-500 tracking-tighter">{{ $t('exchangeRate') }}</p>
       <div v-if="isLoading" class="mt-5 m-auto block animate-pulse w-40 h-7 bg-blue-400 rounded"></div>
       <div v-else class="max-w-fit m-auto block">
         <h1 class="text-center text-4xl mt-2">{{ getRate }}</h1>
@@ -53,29 +54,30 @@
                 d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
                 fill="currentColor"/>
           </svg>
-          Convert
+          {{ $t('convert') }}
         </button>
 
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import {mapGetters, mapActions} from 'vuex'
 import mySelect from '@/components/mySelect.vue'
 import amountInput from '@/components/amountInput.vue'
+import localeSwitcher from '@/components/localeSwithcher.vue'
 
 export default {
   name: 'Home',
 
   components: {
     mySelect,
-    amountInput
+    amountInput,
+    localeSwitcher
   },
 
-  computed:{
+  computed: {
     ...mapGetters(['rate', 'rates']),
 
     getRate() {
@@ -113,7 +115,7 @@ export default {
     },
 
     swapValues() {
-      [this.from, this.to] = [this.to, this.from]
+      [this.form.from, this.form.to] = [this.form.to, this.form.from]
     }
   }
 }

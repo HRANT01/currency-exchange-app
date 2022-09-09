@@ -1,5 +1,5 @@
-import { createStore } from 'vuex'
-import { fetchRates, fetchExchangeRate } from '@/services/exchangeReqs'
+import {createStore} from 'vuex'
+import {fetchRates, fetchExchangeRate} from '@/services/exchangeReqs'
 
 export default createStore({
   state: {
@@ -23,13 +23,13 @@ export default createStore({
   },
 
   actions: {
-    async getRates({commit}){
+    async getRates({commit}) {
       const result = await fetchRates()
 
       commit('setRates', result)
     },
 
-    async getExchangeRate({commit}, payload){
+    async getExchangeRate({commit}, payload) {
       const result = await fetchExchangeRate(payload.from, payload.to)
 
       commit('setRate', result)
